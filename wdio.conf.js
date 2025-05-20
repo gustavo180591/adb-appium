@@ -50,14 +50,17 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
+    
     capabilities: [{
-        // capabilities for local Appium web tests on an Android Emulator
-        platformName: 'Android',
-        browserName: 'Chrome',
-        'appium:deviceName': 'Android GoogleAPI Emulator',
-        'appium:platformVersion': '12.0',
-        'appium:automationName': 'UiAutomator2'
-    }],
+  platformName: 'Android',
+  'appium:deviceName': 'ZY22HRRMDX',
+  'appium:platformVersion': '15',
+  'appium:automationName': 'UiAutomator2',
+  'appium:appPackage': 'com.instagram.android',
+  'appium:appActivity': '.activity.MainTabActivity',
+  'appium:noReset': true
+}],
+
 
     //
     // ===================
