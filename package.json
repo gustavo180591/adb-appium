@@ -260,6 +260,7 @@
     "shebang-command": "^2.0.0",
     "shebang-regex": "^3.0.0",
     "shell-quote": "^1.8.2",
+    "shelljs": "^0.10.0",
     "side-channel": "^1.1.0",
     "side-channel-list": "^1.0.0",
     "side-channel-map": "^1.0.1",
@@ -326,5 +327,8 @@
     "yn": "^3.1.1",
     "yocto-queue": "^0.1.0",
     "zip-stream": "^6.0.1"
+  },
+  "directories": {
+    "test": "test"
   }
 }
