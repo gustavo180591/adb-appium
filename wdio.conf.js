@@ -52,14 +52,22 @@ exports.config = {
     //
     
     capabilities: [{
-  platformName: 'Android',
-  'appium:deviceName': 'ZY22HRRMDX',
-  'appium:platformVersion': '15',
-  'appium:automationName': 'UiAutomator2',
-  'appium:appPackage': 'com.instagram.android',
-  'appium:appActivity': '.activity.MainTabActivity',
-  'appium:noReset': true
-}],
+        platformName: 'Android',
+        'appium:deviceName': 'ZY22HRRMDX',
+        'appium:platformVersion': '15',
+        'appium:automationName': 'UiAutomator2',
+        'appium:appPackage': 'com.instagram.android',
+        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
+        'appium:noReset': true,
+        'appium:newCommandTimeout': 30000,
+        'appium:autoGrantPermissions': true,
+        'appium:systemPort': 8200,
+        'appium:uiautomator2ServerLaunchTimeout': 60000,
+        'appium:uiautomator2ServerInstallTimeout': 60000,
+        'appium:androidInstallTimeout': 90000,
+        'appium:adbExecTimeout': 60000
+    }],
+
 
 
     //
