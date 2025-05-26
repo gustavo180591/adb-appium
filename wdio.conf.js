@@ -24,13 +24,13 @@ exports.config = {
     //
     // Máximo de instancias simultáneas
     //
-    maxInstances: 3,
+    maxInstances: 4,
   
     //
     // Capabilities: dos dispositivos, cada uno con su systemPort distinto
     //
     capabilities: [
-      {
+      /* {
         // Dispositivo 1
         platformName: 'Android',
         'appium:udid': 'ZY22HRRMDX',
@@ -48,11 +48,11 @@ exports.config = {
         'appium:uiautomator2ServerInstallTimeout': 60000,
         'appium:androidInstallTimeout': 90000,
         'appium:adbExecTimeout': 60000,
-      },
+      }, */
       {
-        // Dispositivo 2
+        // Dispositivo 1
         platformName: 'Android',
-        'appium:udid': 'HA1W6N1G',
+        'appium:udid': 'HA1W5A4Y',
         'appium:deviceName': 'TB310FU',
         'appium:platformVersion': '13',
         'appium:automationName': 'UiAutomator2',
@@ -69,7 +69,45 @@ exports.config = {
         'appium:adbExecTimeout': 60000,
       },
       {
+        // Dispositivo 2
+        platformName: 'Android',
+        'appium:udid': 'HA1W5T45',
+        'appium:deviceName': 'TB310FU',
+        'appium:platformVersion': '13',
+        'appium:automationName': 'UiAutomator2',
+        'appium:appPackage': 'com.instagram.android',
+        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
+        'appium:noReset': true,
+        'appium:newCommandTimeout': 30000,
+        'appium:autoGrantPermissions': true,
+        // otro systemPort
+        'appium:systemPort': 8201,
+        'appium:uiautomator2ServerLaunchTimeout': 60000,
+        'appium:uiautomator2ServerInstallTimeout': 60000,
+        'appium:androidInstallTimeout': 90000,
+        'appium:adbExecTimeout': 60000,
+      },
+      {
         // Dispositivo 3
+        platformName: 'Android',
+        'appium:udid': 'HA1W6N1G',
+        'appium:deviceName': 'TB310FU',
+        'appium:platformVersion': '13',
+        'appium:automationName': 'UiAutomator2',
+        'appium:appPackage': 'com.instagram.android',
+        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
+        'appium:noReset': true,
+        'appium:newCommandTimeout': 30000,
+        'appium:autoGrantPermissions': true,
+        // otro systemPort
+        'appium:systemPort': 8202,
+        'appium:uiautomator2ServerLaunchTimeout': 60000,
+        'appium:uiautomator2ServerInstallTimeout': 60000,
+        'appium:androidInstallTimeout': 90000,
+        'appium:adbExecTimeout': 60000,
+      },
+      {
+        // Dispositivo 4
         platformName: 'Android',
         'appium:udid': 'HA1W4V5H',
         'appium:deviceName': 'TB310FU',
@@ -81,7 +119,7 @@ exports.config = {
         'appium:newCommandTimeout': 30000,
         'appium:autoGrantPermissions': true,
         // otro systemPort
-        'appium:systemPort': 8202,
+        'appium:systemPort': 8203,
         'appium:uiautomator2ServerLaunchTimeout': 60000,
         'appium:uiautomator2ServerInstallTimeout': 60000,
         'appium:androidInstallTimeout': 90000,
