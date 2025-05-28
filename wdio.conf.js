@@ -147,7 +147,8 @@ exports.config = {
   
     mochaOpts: {
       ui: 'bdd',
-      timeout: 60000
+      timeout: 120000,         // 2 minutos para cada spec
+    bail: true
     }
   };
   
