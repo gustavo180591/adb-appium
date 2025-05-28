@@ -1,7 +1,7 @@
 describe('Instagram - Buscar y dar Me Gusta', () => {
   it('debería abrir Instagram, buscar perfil y darle like a la última publicación', async () => {
     const textoBusqueda = 'arabelasoler';
-    const WAIT_TIME = 5000;
+    const WAIT_TIME = 8000; // Aumentado para evitar timeouts
 
     try {
       console.log('🔄 Reiniciando Instagram...');
@@ -30,26 +30,21 @@ describe('Instagram - Buscar y dar Me Gusta', () => {
       const searchInput = await $(`android=new UiSelector().resourceId("com.instagram.android:id/action_bar_search_edit_text")`);
       await searchInput.click();
       await searchInput.waitForDisplayed({ timeout: WAIT_TIME });
-
       await searchInput.setValue(textoBusqueda);
       await driver.pause(3000);
+
       console.log('🔍 Buscando perfil...');
       // Buscar y hacer click en el resultado que contiene el texto 'crucerodelnorte'
       const resultadoPerfil = await $(
         'android=new UiSelector()' +
         '.resourceId("com.instagram.android:id/row_search_user_info_container")' +
         '.instance(0)'
-      );      await resultadoPerfil.waitForDisplayed({ timeout: 3000 });
+      );      await resultadoPerfil.waitForDisplayed({ timeout: WAIT_TIME });
       await resultadoPerfil.click();
       await driver.pause(3000);
 
-      // Abrir el perfil usando un selector genérico (primer elemento clickable dentro del contenedor de resultados)
-/*       const perfilElement = await $(
-        'android=new UiSelector().resourceId("com.instagram.android:id/recycler_view").childSelector(new UiSelector().clickable(true).index(0))'
-      );
-      await perfilElement.waitForDisplayed({ timeout: WAIT_TIME });
-      await perfilElement.click();
-      await driver.pause(WAIT_TIME); */
+      let allPostsLiked = true; // Variable para rastrear si todos los posts tienen like
+
       for (let col = 1; col <= 3; col++) {
         console.log(`🔄 Iteración columna ${col}: abriendo reel en fila 1, columna ${col}`);
       
@@ -60,21 +55,44 @@ describe('Instagram - Buscar y dar Me Gusta', () => {
 
         const posteos = await $$(selector);
         const posteo = posteos[0];
-        await posteo.waitForDisplayed({ timeout: 7000 });
+        await posteo.waitForDisplayed({ timeout: WAIT_TIME });
         await posteo.click();
         await driver.pause(3000);
+
+        // Verificar si el post ya tiene like usando el selector exacto
+        let isLiked = false;
+        try {
+          const likedButton = await $('android=new UiSelector().resourceId("com.instagram.android:id/row_feed_button_like").description("Te gusta")');
+          isLiked = await likedButton.isDisplayed();
+        } catch (error) {
+          isLiked = false;
+        }
+
+        if (isLiked) {
+          console.log(`ℹ️ La publicación en columna ${col} ya tiene like, pasando a la siguiente...`);
+          await driver.back();
+          await driver.pause(WAIT_TIME);
+          continue;
+        } else {
+          allPostsLiked = false; // Si encontramos un post sin like, actualizamos la bandera
+        }
       
         // 3) Dar like
         const likeBtn = await $(
-          'android=new UiSelector().description("Me gusta")'
+          'android=new UiSelector().resourceId("com.instagram.android:id/row_feed_button_like")'
         );
-        await likeBtn.waitForDisplayed({ timeout: 3000 });
+        await likeBtn.waitForDisplayed({ timeout: WAIT_TIME });
         await likeBtn.click();
         console.log(`✅ Like en fila 1, columna ${col} enviado`);
       
         // 4) Volver atrás para la siguiente iteración
         await driver.back();
         await driver.pause(WAIT_TIME);
+      }
+
+      // Verificar si todos los posts tenían like
+      if (allPostsLiked) {
+        console.log('🎉 FINALIZADO!!!');
       }
 
       // Esperar un momento antes de terminar

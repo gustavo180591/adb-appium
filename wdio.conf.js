@@ -24,13 +24,14 @@ exports.config = {
     //
     // Máximo de instancias simultáneas
     //
-    maxInstances: 4,
+   /*  maxInstances: 4, */
+    maxInstances: 1,
   
     //
     // Capabilities: dos dispositivos, cada uno con su systemPort distinto
     //
     capabilities: [
-      /* {
+      {
         // Dispositivo 1
         platformName: 'Android',
         'appium:udid': 'ZY22HRRMDX',
@@ -48,8 +49,8 @@ exports.config = {
         'appium:uiautomator2ServerInstallTimeout': 60000,
         'appium:androidInstallTimeout': 90000,
         'appium:adbExecTimeout': 60000,
-      }, */
-      {
+      }
+     /*  {
         // Dispositivo 1
         platformName: 'Android',
         'appium:udid': 'HA1W5A4Y',
@@ -124,7 +125,7 @@ exports.config = {
         'appium:uiautomator2ServerInstallTimeout': 60000,
         'appium:androidInstallTimeout': 90000,
         'appium:adbExecTimeout': 60000,
-      }
+      } */
     ],
   
     //
