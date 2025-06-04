@@ -3,8 +3,10 @@ const path = require('path');
 
 describe('Cambio de proxy (modo avión)', () => {
     it('Debería activar modo avión y volver a activar datos móviles', async () => {
-      const WAIT_TIME = 70000; // 1 minuto y 10 segundos con modo avión
+      const AIRPLANE_MODE_TIME = 70000; // 1 minuto y 10 segundos con modo avión
       const RECONNECT_WAIT = 30000; // 30 segundos para reconexión
+      const MAX_RECONNECT_ATTEMPTS = 5; // Máximo número de intentos de reconexión
+      const RECONNECT_INTERVAL = 5000; // 5 segundos entre intentos de reconexión
       const udid = 'ZY22HRRMDX';
       const LOG_FILE = path.join(__dirname, '../../logs/ip-changes.log');
   
@@ -12,7 +14,12 @@ describe('Cambio de proxy (modo avión)', () => {
   
       const runAdbCommand = (cmd) => {
         return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error(`Timeout executing command: ${cmd}`));
+          }, 10000); // 10 segundos de timeout para comandos ADB
+
           exec(cmd, (error, stdout, stderr) => {
+            clearTimeout(timeout);
             if (error) {
               console.error(`❌ Error ejecutando "${cmd}":`, stderr);
               return reject(error);
@@ -27,6 +34,7 @@ describe('Cambio de proxy (modo avión)', () => {
         console.log('🔄 Reconectando ADB...');
         try {
           await runAdbCommand('adb kill-server');
+          await driver.pause(1000);
           await runAdbCommand('adb start-server');
           await driver.pause(2000);
           const devices = await runAdbCommand('adb devices');
@@ -40,8 +48,13 @@ describe('Cambio de proxy (modo avión)', () => {
 
       const getCurrentIP = async () => {
         try {
-          // Forzar IPv4 usando curl con -4
-          const result = await runAdbCommand(`adb -s ${udid} shell curl -4 -s ifconfig.me`);
+          // Intentar obtener IP con timeout
+          const result = await Promise.race([
+            runAdbCommand(`adb -s ${udid} shell curl -4 -s ifconfig.me`),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Timeout getting IP')), 5000)
+            )
+          ]);
           return result.trim();
         } catch (error) {
           console.error('❌ Error obteniendo IP:', error.message);
@@ -61,6 +74,23 @@ describe('Cambio de proxy (modo avión)', () => {
         
         fs.appendFileSync(LOG_FILE, logEntry);
         console.log('📝 Registro de cambio de IP guardado');
+      };
+
+      const waitForConnection = async () => {
+        for (let attempt = 1; attempt <= MAX_RECONNECT_ATTEMPTS; attempt++) {
+          console.log(`🔄 Intento de reconexión ${attempt}/${MAX_RECONNECT_ATTEMPTS}...`);
+          
+          if (await reconnectAdb()) {
+            console.log('✅ Conexión ADB restablecida');
+            return true;
+          }
+
+          if (attempt < MAX_RECONNECT_ATTEMPTS) {
+            console.log(`⏳ Esperando ${RECONNECT_INTERVAL/1000} segundos antes del siguiente intento...`);
+            await driver.pause(RECONNECT_INTERVAL);
+          }
+        }
+        return false;
       };
   
       try {
@@ -91,8 +121,8 @@ describe('Cambio de proxy (modo avión)', () => {
         await runAdbCommand(`adb -s ${udid} shell svc bluetooth disable`);
         await runAdbCommand(`adb -s ${udid} shell svc nfc disable`);
   
-        console.log(`⏳ Esperando ${WAIT_TIME/1000} segundos con modo avión activado...`);
-        await driver.pause(WAIT_TIME);
+        console.log(`⏳ Esperando ${AIRPLANE_MODE_TIME/1000} segundos con modo avión activado...`);
+        await driver.pause(AIRPLANE_MODE_TIME);
   
         // Desactivar modo avión
         console.log('📡 Desactivando modo avión...');
@@ -108,17 +138,13 @@ describe('Cambio de proxy (modo avión)', () => {
         await runAdbCommand(`adb -s ${udid} shell svc data enable`);
         await driver.pause(5000);
 
-        // Intentar reconectar ADB
-        let isConnected = await reconnectAdb();
-        if (!isConnected) {
-          console.log('⚠️ No se pudo reconectar ADB automáticamente. Intentando nuevamente...');
-          await driver.pause(5000);
-          isConnected = await reconnectAdb();
-        }
-
-        if (!isConnected) {
+        // Intentar reconectar con múltiples intentos
+        if (!await waitForConnection()) {
           throw new Error('No se pudo reconectar con el dispositivo después de varios intentos');
         }
+
+        // Esperar un poco más para asegurar que la conexión de datos esté estable
+        await driver.pause(5000);
 
         // Obtener nueva IP
         const newIP = await getCurrentIP();

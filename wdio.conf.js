@@ -24,7 +24,6 @@ exports.config = {
     //
     // Máximo de instancias simultáneas
     //
-   /*  maxInstances: 4, */
     maxInstances: 1,
   
     //
@@ -41,91 +40,14 @@ exports.config = {
         'appium:appPackage': 'com.instagram.android',
         'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
         'appium:noReset': true,
-        'appium:newCommandTimeout': 30000,
+        'appium:newCommandTimeout': 60000,
         'appium:autoGrantPermissions': true,
-        // systemPort distinto para multiplexar
         'appium:systemPort': 8201,
-        'appium:uiautomator2ServerLaunchTimeout': 60000,
-        'appium:uiautomator2ServerInstallTimeout': 60000,
-        'appium:androidInstallTimeout': 90000,
+        'appium:uiautomator2ServerLaunchTimeout': 120000,
+        'appium:uiautomator2ServerInstallTimeout': 120000,
+        'appium:androidInstallTimeout': 120000,
         'appium:adbExecTimeout': 60000,
       }
-     /*  {
-        // Dispositivo 1
-        platformName: 'Android',
-        'appium:udid': 'HA1W5A4Y',
-        'appium:deviceName': 'TB310FU',
-        'appium:platformVersion': '13',
-        'appium:automationName': 'UiAutomator2',
-        'appium:appPackage': 'com.instagram.android',
-        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
-        'appium:noReset': true,
-        'appium:newCommandTimeout': 30000,
-        'appium:autoGrantPermissions': true,
-        // otro systemPort
-        'appium:systemPort': 8200,
-        'appium:uiautomator2ServerLaunchTimeout': 60000,
-        'appium:uiautomator2ServerInstallTimeout': 60000,
-        'appium:androidInstallTimeout': 90000,
-        'appium:adbExecTimeout': 60000,
-      },
-      {
-        // Dispositivo 2
-        platformName: 'Android',
-        'appium:udid': 'HA1W5T45',
-        'appium:deviceName': 'TB310FU',
-        'appium:platformVersion': '13',
-        'appium:automationName': 'UiAutomator2',
-        'appium:appPackage': 'com.instagram.android',
-        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
-        'appium:noReset': true,
-        'appium:newCommandTimeout': 30000,
-        'appium:autoGrantPermissions': true,
-        // otro systemPort
-        'appium:systemPort': 8201,
-        'appium:uiautomator2ServerLaunchTimeout': 60000,
-        'appium:uiautomator2ServerInstallTimeout': 60000,
-        'appium:androidInstallTimeout': 90000,
-        'appium:adbExecTimeout': 60000,
-      },
-      {
-        // Dispositivo 3
-        platformName: 'Android',
-        'appium:udid': 'HA1W6N1G',
-        'appium:deviceName': 'TB310FU',
-        'appium:platformVersion': '13',
-        'appium:automationName': 'UiAutomator2',
-        'appium:appPackage': 'com.instagram.android',
-        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
-        'appium:noReset': true,
-        'appium:newCommandTimeout': 30000,
-        'appium:autoGrantPermissions': true,
-        // otro systemPort
-        'appium:systemPort': 8202,
-        'appium:uiautomator2ServerLaunchTimeout': 60000,
-        'appium:uiautomator2ServerInstallTimeout': 60000,
-        'appium:androidInstallTimeout': 90000,
-        'appium:adbExecTimeout': 60000,
-      },
-      {
-        // Dispositivo 4
-        platformName: 'Android',
-        'appium:udid': 'HA1W4V5H',
-        'appium:deviceName': 'TB310FU',
-        'appium:platformVersion': '13',
-        'appium:automationName': 'UiAutomator2',
-        'appium:appPackage': 'com.instagram.android',
-        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
-        'appium:noReset': true,
-        'appium:newCommandTimeout': 30000,
-        'appium:autoGrantPermissions': true,
-        // otro systemPort
-        'appium:systemPort': 8203,
-        'appium:uiautomator2ServerLaunchTimeout': 60000,
-        'appium:uiautomator2ServerInstallTimeout': 60000,
-        'appium:androidInstallTimeout': 90000,
-        'appium:adbExecTimeout': 60000,
-      } */
     ],
   
     //
@@ -138,17 +60,17 @@ exports.config = {
     //
     logLevel: 'info',
     bail: 0,
-    waitforTimeout: 10000,
-    connectionRetryTimeout: 120000,
-    connectionRetryCount: 3,
+    waitforTimeout: 30000,
+    connectionRetryTimeout: 180000,
+    connectionRetryCount: 5,
   
     framework: 'mocha',
     reporters: ['spec'],
   
     mochaOpts: {
       ui: 'bdd',
-      timeout: 120000,         // 2 minutos para cada spec
-    bail: true
+      timeout: 300000,  // 5 minutos para cada spec
+      bail: true
     }
   };
   
