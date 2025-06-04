@@ -98,6 +98,7 @@
     "detect-libc": "^2.0.4",
     "detect-node": "^2.1.0",
     "diff": "^7.0.0",
+    "dotenv": "^16.5.0",
     "dunder-proto": "^1.0.1",
     "duplexer": "^0.1.2",
     "eastasianwidth": "^0.2.0",

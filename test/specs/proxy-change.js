@@ -3,11 +3,11 @@ const path = require('path');
 
 describe('Cambio de proxy (modo avión)', () => {
     it('Debería activar modo avión y volver a activar datos móviles', async () => {
-      const AIRPLANE_MODE_TIME = 70000; // 1 minuto y 10 segundos con modo avión
+      const AIRPLANE_MODE_TIME = 60000; // 1 minuto con modo avión
       const RECONNECT_WAIT = 30000; // 30 segundos para reconexión
       const MAX_RECONNECT_ATTEMPTS = 5; // Máximo número de intentos de reconexión
       const RECONNECT_INTERVAL = 5000; // 5 segundos entre intentos de reconexión
-      const udid = 'ZY22HRRMDX';
+      const udid = 'R58N857S75Y';
       const LOG_FILE = path.join(__dirname, '../../logs/ip-changes.log');
   
       const exec = require('child_process').exec;
@@ -145,6 +145,20 @@ describe('Cambio de proxy (modo avión)', () => {
 
         // Esperar un poco más para asegurar que la conexión de datos esté estable
         await driver.pause(5000);
+
+        // --- INICIO DE NUEVO CÓDIGO ---
+        // Asegurar que WiFi principal esté desactivado (por si acaso)
+        console.log('📡 Asegurando que WiFi principal esté desactivado...');
+        await runAdbCommand(`adb -s ${udid} shell svc wifi disable`);
+        await driver.pause(1000); // Pequeña pausa
+
+        // Activar Mobile Hotspot
+        console.log('🔥 Activando Mobile Hotspot...');
+        // Intentamos activar el hotspot Wi-Fi. Este comando puede variar.
+        await runAdbCommand(`adb -s ${udid} shell cmd connectivity tether start wifi`); 
+        console.log('⏳ Esperando 5 segundos para que el hotspot se active...');
+        await driver.pause(5000); 
+        // --- FIN DE NUEVO CÓDIGO ---
 
         // Obtener nueva IP
         const newIP = await getCurrentIP();

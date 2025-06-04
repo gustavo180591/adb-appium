@@ -1,8 +1,10 @@
+const config = require('./config');
+
 exports.config = {
     runner: 'local',
-    hostname: '127.0.0.1',
-    port: 4723,
-    path: '/',
+    hostname: config.appium.host,
+    port: config.appium.port,
+    path: config.appium.path,
     
     specs: [
         './test/specs/proxy-change.js'
@@ -13,20 +15,20 @@ exports.config = {
     
     capabilities: [{
         platformName: 'Android',
-        'appium:udid': 'ZY22HRRMDX',
-        'appium:deviceName': 'motorola_edge_40_pro',
-        'appium:platformVersion': '15',
+        'appium:udid': config.devices.device1.udid,
+        'appium:deviceName': config.devices.device1.name,
+        'appium:platformVersion': config.devices.device1.platformVersion,
         'appium:automationName': 'UiAutomator2',
-        'appium:appPackage': 'com.android.settings',
-        'appium:appActivity': 'com.android.settings.Settings',
+        'appium:appPackage': config.apps.settings.package,
+        'appium:appActivity': config.apps.settings.activity,
         'appium:noReset': true,
-        'appium:newCommandTimeout': 60000,
+        'appium:newCommandTimeout': config.timeouts.command,
         'appium:autoGrantPermissions': true,
-        'appium:systemPort': 8201,
-        'appium:uiautomator2ServerLaunchTimeout': 120000,
-        'appium:uiautomator2ServerInstallTimeout': 120000,
-        'appium:androidInstallTimeout': 120000,
-        'appium:adbExecTimeout': 60000,
+        'appium:systemPort': config.devices.device1.systemPort,
+        'appium:uiautomator2ServerLaunchTimeout': config.timeouts.uiautomator2Launch,
+        'appium:uiautomator2ServerInstallTimeout': config.timeouts.uiautomator2Install,
+        'appium:androidInstallTimeout': config.timeouts.androidInstall,
+        'appium:adbExecTimeout': config.timeouts.adbExec
     }],
     
     logLevel: 'info',
