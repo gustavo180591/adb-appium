@@ -33,6 +33,27 @@ exports.config = {
       {
         // Dispositivo 1
         platformName: 'Android',
+        'appium:udid': 'R58N857S75Y',
+        'appium:deviceName': 'SM-A715F',
+        'appium:platformVersion': '15',
+        'appium:automationName': 'UiAutomator2',
+        'appium:appPackage': 'com.instagram.android',
+        'appium:appActivity': 'com.instagram.android.activity.MainTabActivity',
+        'appium:noReset': true,
+        'appium:newCommandTimeout': 60000,
+        'appium:autoGrantPermissions': true,
+        'appium:systemPort': 8201,
+        'appium:uiautomator2ServerLaunchTimeout': 120000,
+        'appium:uiautomator2ServerInstallTimeout': 120000,
+        'appium:androidInstallTimeout': 120000,
+        'appium:adbExecTimeout': 60000,
+      }
+    ],
+
+  /*   capabilities: [
+      {
+        // Dispositivo 1
+        platformName: 'Android',
         'appium:udid': 'ZY22HRRMDX',
         'appium:deviceName': 'motorola_edge_40_pro',
         'appium:platformVersion': '15',
@@ -48,7 +69,7 @@ exports.config = {
         'appium:androidInstallTimeout': 120000,
         'appium:adbExecTimeout': 60000,
       }
-    ],
+    ], */
   
     //
     // No arrancamos Appium como servicio

@@ -9,11 +9,17 @@ const config = {
     
     devices: {
         device1: {
+            udid: process.env.DEVICE1_UDID || 'R58N857S75Y',
+            name: process.env.DEVICE1_NAME || 'SM-A715F',
+            platformVersion: process.env.DEVICE1_PLATFORM_VERSION || '13',
+            systemPort: parseInt(process.env.DEVICE1_SYSTEM_PORT) || 8201
+        },
+        /* device1: {
             udid: process.env.DEVICE1_UDID || 'ZY22HRRMDX',
             name: process.env.DEVICE1_NAME || 'motorola_edge_40_pro',
             platformVersion: process.env.DEVICE1_PLATFORM_VERSION || '15',
             systemPort: parseInt(process.env.DEVICE1_SYSTEM_PORT) || 8201
-        },
+        }, */
         device2: {
             udid: process.env.DEVICE2_UDID || 'DEVICE_ID_2',
             name: process.env.DEVICE2_NAME || 'Device2',
