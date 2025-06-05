@@ -27,71 +27,36 @@ describe('Activar Hotspot', () => {
         await runAdbCommand(`adb -s ${udid} shell am start -n com.android.settings/.Settings$NetworkDashboardActivity`);
         await driver.pause(3000);
 
-        // Buscar y hacer clic en el menú de hotspot usando varios textos posibles
-        const hotspotMenuTexts = [
-          'Zona Wi-Fi portátil',
-          'Mobile Hotspot',
-          'Hotspot',
-          'Punto de acceso',
-          'Wi-Fi hotspot',
-        ];
-        let hotspotMenu = null;
-        for (const text of hotspotMenuTexts) {
-          try {
-            console.log(`🔎 Buscando menú: ${text}`);
-            const el = await $(`android=new UiSelector().textContains("${text}")`);
-            if (await el.isDisplayed()) {
-              hotspotMenu = el;
-              console.log(`✅ Encontrado y click en menú: ${text}`);
-              await el.click();
-              break;
-            }
-          } catch (e) {
-            console.log(`❌ No se encontró menú: ${text}`);
-          }
-        }
-        if (!hotspotMenu) {
-          throw new Error('No se encontró ningún menú de hotspot');
-        }
+        // Click en el primer elemento usando coordenadas con tap
+        console.log('🔎 Haciendo tap en la primera posición...');
+        await runAdbCommand(`adb -s ${udid} shell input tap 540 1464`); // Centro del área [0,1379,1080,1549]
         await driver.pause(2000);
 
-        // Buscar y activar el switch usando varios tipos de widgets
-        const switchSelectors = [
-          'android=new UiSelector().className("android.widget.Switch")',
-          'android=new UiSelector().className("android.widget.CompoundButton")',
-          'android=new UiSelector().resourceId("android:id/switch_widget")',
-          'android=new UiSelector().clickable(true).checkable(true)'
-        ];
-        let switchElement = null;
-        for (const selector of switchSelectors) {
-          try {
-            console.log(`🔎 Buscando switch con selector: ${selector}`);
-            const el = await $(selector);
-            if (await el.isDisplayed()) {
-              switchElement = el;
-              console.log(`✅ Encontrado switch con selector: ${selector}`);
-              break;
-            }
-          } catch (e) {
-            console.log(`❌ No se encontró switch con selector: ${selector}`);
-          }
-        }
-        if (switchElement) {
+        // Click en el segundo elemento usando coordenadas con tap
+        console.log('🔎 Haciendo tap en la segunda posición...');
+        await runAdbCommand(`adb -s ${udid} shell input tap 540 1677`); // Centro del área [63,1608,1017,1746]
+        await driver.pause(2000);
+
+        // Buscar y manejar el switch de hotspot
+        console.log('🔎 Buscando el switch de hotspot...');
+        const switchElement = await $('android=new UiSelector().className("android.widget.Switch").resourceId("android:id/switch_widget")');
+        
+        if (await switchElement.isDisplayed()) {
           const checked = await switchElement.getAttribute('checked');
           if (checked === 'false') {
+            console.log('📱 Activando el hotspot...');
             await switchElement.click();
-            console.log('✅ Switch activado');
+            console.log('✅ Hotspot activado');
           } else {
-            console.log('ℹ️ Switch ya estaba activado');
+            console.log('ℹ️ El hotspot ya está activado');
           }
         } else {
-          console.log('⚠️ No se encontró el switch, intentando método alternativo...');
-          // Intentar tap en coordenadas específicas
-          await runAdbCommand(`adb -s ${udid} shell input tap 500 500`);
+          throw new Error('No se encontró el switch del hotspot');
         }
-        await driver.pause(5000);
-
+        
+        await driver.pause(3000);
         console.log('✅ Proceso completado');
+        
       } catch (error) {
         console.error('❌ Error:', error.message);
         await driver.saveScreenshot('./error-hotspot.png');
